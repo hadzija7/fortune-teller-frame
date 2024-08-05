@@ -1,6 +1,18 @@
 import { FrameMetadataType, getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
 import { NEXT_PUBLIC_URL } from '../config';
 
+export function getFrameHtml(frameMetadata: FrameMetadataType) {
+  const html = getFrameHtmlResponse(frameMetadata);
+
+  const extraTags = [
+    '<meta property="og:title" content="OAO: Farcaster">',
+    '<meta property="og:description" content="Farcaster Protocol OAO">',
+    '<meta property="fc:frame:image:aspect_ratio" content="1:1" />',
+  ];
+  
+  return `${html.slice(0, html.length - 14)}${extraTags.join('')}</head></html>`;
+}
+
 export function getInstructionsHtml(frameMetadata: FrameMetadataType){
     const html = getFrameHtmlResponse(frameMetadata);
 
