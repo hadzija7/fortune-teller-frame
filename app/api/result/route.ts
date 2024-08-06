@@ -36,6 +36,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
     const decodedData = web3.eth.abi.decodeParameters(event_abi, data.toString());
     const llamaPrompt = decodedData.prompt
+    const requestId = Number(decodedData.requestId)
 
     //reading result from the contract
     const contract: any = new web3.eth.Contract(FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS);
@@ -58,6 +59,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       '<meta property="og:title" content="FortuneTeller frame">',
       '<meta property="og:description" content="Farcaster Protocol OAO">',
       '<meta property="fc:frame:image:aspect_ratio" content="1:1" />',
+      '<meta property="fc:frame:button:1" content="Mint NFT" />',
+      '<meta property="fc:frame:button:1:action" content="tx" />',
+      `<meta property="fc:frame:button:1:target" content="${NEXT_PUBLIC_URL}/api/mint?requestId=${encodeURIComponent(requestId)}&fortune=${encodeURIComponent(llamaResult)}&image=${encodeURIComponent(diffusionResult)}"/>`,
+      `<meta property="fc:frame:button:1:post_url" content="${NEXT_PUBLIC_URL}/api/last_frame" />`,
     ];
     
     const ret = `${html.slice(0, html.length - 14)}${extraTags.join('')}</head></html>`;
