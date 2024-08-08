@@ -7,7 +7,7 @@ import "forge-std/console.sol";
 
 /// @notice Contract that requests double inference from OAO. 
 /// @dev First inference is initiated through calculateAIResult method, the second one is requested from the callback.
-contract PromptNestedInference is AIOracleCallbackReceiverPayable {
+contract FortuneTeller is AIOracleCallbackReceiverPayable {
 
     event promptsUpdated(
         uint256 requestId,
@@ -83,11 +83,7 @@ contract PromptNestedInference is AIOracleCallbackReceiverPayable {
             (uint256 model2Id) = abi.decode(callbackData, (uint256));
             uint256 model2Fee = estimateFee(model2Id);
 
-            string memory promptForDiffusion = unicode"(pepe the frog in astronaut clothing), colorful #0F6FFF hues, (Charlie and Jerry style), whimsical and imaginative, (engaging expressions), soaring through a mesmerizing galaxy, blockchain crypto symboled planet, vibrant stars and nebulae, (Aries zodiac features), (high quality, ultra-detailed), playful and surreal atmosphere, inspired by “Alejandro Burdisio” coloring style, (meme, line sticker pack), dreamy background with twinkling celestial bodies.";
-
-            //need to figure out how to pass value to delgatecall
-            (bool success, bytes memory data) = address(aiOracle).call{value: model2Fee}(abi.encodeWithSignature("requestCallback(uint256,bytes,address,uint64,bytes)", model2Id, bytes(promptForDiffusion), address(this), callbackGasLimit[model2Id], ""));
-            // (bool success, ) = address(aiOracle).call{value: model2Fee}(abi.encodeWithSignature("calculateAIResult(uint256,string)", model2Id, bytes(output)));
+            (bool success, bytes memory data) = address(aiOracle).call{value: model2Fee}(abi.encodeWithSignature("requestCallback(uint256,bytes,address,uint64,bytes)", model2Id, output, address(this), callbackGasLimit[model2Id], ""));
             require(success, "failed to call recursive callback");
 
             (uint256 rid) = abi.decode(data, (uint256));
