@@ -18,7 +18,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           label: 'Play Again',
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/wonderingWizzard.png`,
+      image: `${NEXT_PUBLIC_URL}/lastFrame.png`,
       post_url: `${NEXT_PUBLIC_URL}/api/start`,
     }),
   );

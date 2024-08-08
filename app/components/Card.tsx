@@ -1,3 +1,10 @@
+import { Syncopate } from 'next/font/google'
+const syncopate = Syncopate({
+  weight: "700",
+  subsets: ["latin"],
+});
+
+
 export function FortuneCard({ message, image }: { message: string; image?: string }) {
   return (
     <div style={{
@@ -16,6 +23,7 @@ export function FortuneCard({ message, image }: { message: string; image?: strin
       }}/>
       {message && (
         <div
+          className={syncopate.className}
           style={{
             display: 'flex',
             padding: '10px',
@@ -23,9 +31,7 @@ export function FortuneCard({ message, image }: { message: string; image?: strin
             height: '100%',
             objectFit: 'cover',
             color: '#00F6FF',
-            fontFamily: 'Roboto, sans-serif',
-            fontWeight: 'bolder',
-            fontSize: '30px',
+            fontSize: '35px',
             marginTop: '30px',
           }}
         >
