@@ -3,9 +3,8 @@ pragma solidity ^0.8.13;
 
 import "OAO/contracts/interfaces/IAIOracle.sol";
 import "./AIOracleCallbackReceiverPayable.sol";
-import "forge-std/console.sol";
 
-/// @notice Contract that requests double inference from OAO. 
+/// @notice Contract that requests nested inference from OAO. 
 /// @dev First inference is initiated through calculateAIResult method, the second one is requested from the callback.
 contract FortuneTeller is AIOracleCallbackReceiverPayable {
 
@@ -47,8 +46,8 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
     /// @notice Initialize the contract, binding it to a specified AIOracle.
     constructor(IAIOracle _aiOracle) AIOracleCallbackReceiverPayable(_aiOracle) {
         owner = msg.sender;
-        callbackGasLimit[50] = 500_000; // Stable Diffusion
-        callbackGasLimit[11] = 5_000_000; // Llama
+        callbackGasLimit[50] = 500_000; // Stable-Diffusion
+        callbackGasLimit[11] = 5_000_000; // Llama3
     }
 
     /// @notice sets the callback gas limit for a model
@@ -84,7 +83,7 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
             uint256 model2Fee = estimateFee(model2Id);
 
             (bool success, bytes memory data) = address(aiOracle).call{value: model2Fee}(abi.encodeWithSignature("requestCallback(uint256,bytes,address,uint64,bytes)", model2Id, output, address(this), callbackGasLimit[model2Id], ""));
-            require(success, "failed to call recursive callback");
+            require(success, "failed to call nested inference");
 
             (uint256 rid) = abi.decode(data, (uint256));
             AIOracleRequest storage recursiveRequest = requests[rid];

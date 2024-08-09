@@ -33,8 +33,17 @@ FortuneTeller contracts are deployed on Base to allow fast and affordable blockc
 > If you don't want to use ngrok, you can test the frame using local debugger from [frames.js](https://framesjs.org/).
 
 ## Deployed contracts
+**Base Deployment**
+
+All the contracts are verified on the [blockscout](https://base.blockscout.com/) explorer.
+- FortuneTeller.sol: [0x734Ce2D6E599f8bA401eC77d1fd41C9f57ECf491](https://base.blockscout.com/address/0x734Ce2D6E599f8bA401eC77d1fd41C9f57ECf491)
+- AIGCNFT.sol: [0xa2Ab28f5CBAE53E316868B167872F1bC8Ab28c63](https://base.blockscout.com/address/0xa2Ab28f5CBAE53E316868B167872F1bC8Ab28c63)
 
 ## Video Demo
+
+## Future Work
+- Integrate ORA's rng oracle, to enable more random fortune telling
+- create a dashboard for minted NFTs
 
 ## Learn More
 
