@@ -41,6 +41,8 @@ All the contracts are verified on the [blockscout](https://base.blockscout.com/)
 
 ## Video Demo
 
+[FortuneTeller Demo](https://youtu.be/AFPiAhvKx-0)
+
 ## Future Work
 - Integrate ORA's rng oracle, to enable more random fortune telling
 - create a dashboard for minted NFTs
