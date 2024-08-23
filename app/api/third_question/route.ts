@@ -18,13 +18,24 @@ export async function POST(req: NextRequest) {
     return new NextResponse('Unauthorized', { status: 402 });
   }
   
-  let zodiac: string = message?.raw.action.input.text
+  const bid = message?.button as number;
+
+  let character = ""
+  if (bid == 1) {
+    character = "Astronaut"
+  } else if (bid == 2) {
+    character = "Robot"
+  } else if (bid == 3) {
+    character = "Interstellar Trader"
+  } else if (bid == 4) {
+    character = "Bounty Hunter"
+  }
 
   const fid = message?.interactor.fid || ""
   
   let jsonData: any = await kv.get<{ id: string; quantity: number }[]>(fid.toString());
 
-  jsonData['zodiac'] = zodiac
+  jsonData['character'] = character
   
   try {
     if(!fid){

@@ -71,9 +71,14 @@ export function getThirdQuestionHtml(frameMetadata: FrameMetadataType){
     const extraTags = [
       '<meta property="fc:frame" content="vNext" />',
       '<meta property="fc:frame:image:aspect_ratio" content="1:1" />',
-      `<meta property="fc:frame:input:text" content="eg. Aries, Taurus, Gemini" />`,
-      '<meta property="fc:frame:button:1" content="Answer" />',
+      '<meta property="fc:frame:button:1" content="Astronaut" />',
       `<meta property="fc:frame:button:1:target" content="${NEXT_PUBLIC_URL}/api/third_question" />`,
+      '<meta property="fc:frame:button:2" content="Robot" />',
+      `<meta property="fc:frame:button:2:target" content="${NEXT_PUBLIC_URL}/api/third_question" />`,
+      '<meta property="fc:frame:button:3" content="Interstellar Trader" />',
+      `<meta property="fc:frame:button:3:target" content="${NEXT_PUBLIC_URL}/api/third_question" />`,
+      '<meta property="fc:frame:button:4" content="Bounty Hunter" />',
+      `<meta property="fc:frame:button:4:target" content="${NEXT_PUBLIC_URL}/api/third_question" />`,
     ];
   
     return `${html.slice(0, html.length - 14)}${extraTags.join('')}</head></html>`;
