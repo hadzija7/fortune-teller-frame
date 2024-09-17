@@ -27,15 +27,15 @@ export async function POST(req: NextRequest) {
   console.log("Json data: ", JSON.stringify(jsonData))
 
   const contract = new web3.eth.Contract(FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS);
-  const prompt = `Tell the blockchain (crypto) fortune for user based on the following parameters: ${JSON.stringify(jsonData)}. Answer should be up to 15 words!`
+  const prompt = `Tell the blockchain (crypto) fortune for user based on the following parameters: ${JSON.stringify(jsonData)}. Answer should be up to 25 words!`
 
   const fee11 = Number(await contract.methods.estimateFee(11).call());
-  const fee50 = Number(await contract.methods.estimateFee(50).call())
+  const fee503 = Number(await contract.methods.estimateFee(503).call())
   console.log("fee11: ", fee11.toString())
-  console.log("fee50: ", fee50.toString())
-  const totalFee = ((fee11 + fee50)*11/10)
+  console.log("fee503: ", fee503.toString())
+  const totalFee = ((fee11 + fee503)*11/10)
   
-  const data = contract.methods.calculateAIResult(11, 50, prompt).encodeABI();
+  const data = contract.methods.calculateAIResult(11, 503, prompt).encodeABI();
 
   // Return transaction details response to farcaster
   return NextResponse.json({

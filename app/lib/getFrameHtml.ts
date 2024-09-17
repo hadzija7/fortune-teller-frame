@@ -109,12 +109,12 @@ export function getResultPendingFrameHtml(txhash: string){
     '<meta property="og:description" content="Farcaster Protocol OAO">',
     '<meta property="og:image" content="https://oao-frame.vercel.app/api/images/start">',
     '<meta property="fc:frame:image:aspect_ratio" content="1:1" />',
-    '<meta property="fc:frame:button:1" content="Refresh" />',
-    '<meta property="fc:frame:button:1:action" />',
-    `<meta property="fc:frame:button:1:target" content="${NEXT_PUBLIC_URL}/api/result?id=${txhash}"/>`,
-    '<meta property="fc:frame:button:2" content="View on Etherscan" />',
-    '<meta property="fc:frame:button:2:action" content="link" />',
-    `<meta property="fc:frame:button:2:target" content="${EXPLORERS[CHAIN_ID]}/tx/${txhash}"/>`,
+    '<meta property="fc:frame:button:1" content="View on Etherscan" />',
+    '<meta property="fc:frame:button:1:action" content="link" />',
+    `<meta property="fc:frame:button:1:target" content="${EXPLORERS[CHAIN_ID]}/tx/${txhash}"/>`,
+    '<meta property="fc:frame:button:2" content="Refresh" />',
+    '<meta property="fc:frame:button:2:action" />',
+    `<meta property="fc:frame:button:2:target" content="${NEXT_PUBLIC_URL}/api/result?id=${txhash}"/>`,
   ];
   // hack: remove close tags, add aspect ratio and required OG tags
   const ret = `${html.slice(0, html.length - 14)}${extraTags.join('')}</head></html>`;

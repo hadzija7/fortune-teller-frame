@@ -1,6 +1,7 @@
 import { getFrameMetadata } from '@coinbase/onchainkit/frame';
 import type { Metadata } from 'next';
 import { NEXT_PUBLIC_URL } from './config';
+import { FortuneCard } from './components/Card';
 
 export async function generateMetadata(): Promise<Metadata> {
   const frameMetadata = getFrameMetadata({
@@ -29,7 +30,25 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Home() {
+  const imageUrl = `https://ipfs.io/ipfs/QmWTY9kSTsyosFu1dnYpPWGsHdMWrUqnFbtfkUQ9j9kguN`
+
   return (
-    <div></div>
+    <div style={{
+      height: '100%',
+      margin: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <div style={{
+        width: '1200px',
+        height: '1200px',
+      }}>
+        <FortuneCard 
+          message='word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, word1 word2 word3, '
+          image={imageUrl}
+        />
+      </div>
+    </div>
   );
 }

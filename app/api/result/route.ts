@@ -43,7 +43,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     const llamaResult = await contract.methods.prompts(11, llamaPrompt).call()
     console.log("Llama result: ", llamaResult);
 
-    const diffusionResult = await contract.methods.prompts(50, llamaResult).call()
+    const diffusionResult = await contract.methods.prompts(503, llamaResult).call()
     console.log("Diffusion result: ", diffusionResult)
 
     if (!llamaResult || !diffusionResult) {
