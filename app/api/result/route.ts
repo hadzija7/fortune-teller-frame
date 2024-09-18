@@ -21,6 +21,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         "type": "uint256"
       },
       {
+        "name": "nestedRequestId",
+        "type": "uint256"
+      },
+      {
         "name": "sender",
         "type": "address"
       },

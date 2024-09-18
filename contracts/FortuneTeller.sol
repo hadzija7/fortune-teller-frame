@@ -18,6 +18,7 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
 
     event promptRequest(
         uint256 requestId,
+        uint256 nestedRequestId,
         address sender, 
         uint256 modelId,
         string prompt
@@ -48,6 +49,7 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
         owner = msg.sender;
         callbackGasLimit[50] = 500_000; // Stable-Diffusion
         callbackGasLimit[11] = 5_000_000; // Llama3
+        callbackGasLimit[503] = 500_000; // SD3
     }
 
     /// @notice sets the callback gas limit for a model
@@ -90,7 +92,7 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
             recursiveRequest.input = output;
             recursiveRequest.sender = msg.sender;
             recursiveRequest.modelId = model2Id;
-            emit promptRequest(rid, msg.sender, model2Id, "");
+            emit promptRequest(requestId, rid, msg.sender, model2Id, "");
         }
 
         emit promptsUpdated(requestId, request.modelId, string(request.input), string(output), callbackData);
@@ -113,7 +115,7 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
         request.input = input;
         request.sender = msg.sender;
         request.modelId = model1Id;
-        emit promptRequest(requestId, msg.sender, model1Id, model1Prompt);
+        emit promptRequest(requestId, 0, msg.sender, model1Id, model1Prompt);
         return requestId;
     }
 
