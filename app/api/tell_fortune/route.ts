@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   console.log("fee503: ", fee503.toString())
   const totalFee = ((fee11 + fee503)*11/10)
   
-  const data = contract.methods.calculateAIResult(11, 503, prompt).encodeABI();
+  const data = contract.methods.calculateAIResult(prompt).encodeABI();
 
   // Return transaction details response to farcaster
   return NextResponse.json({

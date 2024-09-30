@@ -13,9 +13,9 @@ export async function GET(req: NextRequest) {
   console.log("Decoded string: ", decodedString)
   console.log("Decoded image: ", imageCID)
 
-  const imageUrl = `https://ipfs.io/ipfs/${imageCID}`
+  // const imageUrl = `https://ipfs.io/ipfs/${imageCID}`
 
-  return new ImageResponse(<FortuneCard message={`${decodedString}`} image={imageUrl}/>, {
+  return new ImageResponse(<FortuneCard message={`${decodedString}`} image={imageCID}/>, {
     width: 1200,
     height: 1200
   });
