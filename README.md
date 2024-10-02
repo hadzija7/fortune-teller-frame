@@ -1,6 +1,9 @@
 # FortuneTeller
 FortuneTeller is a Farcaster frame application that calculates onchain fortune for the users. Users answer specific questions to the wizard. Then the wizard casts its spells and tells the fortune.
 
+## DISCLAIMER
+> [!NOTE]  The purpose of FortuneTeller is to demonstrate how ORA's AI Oracle works. The codebase is NOT audited. Use it at your own risk.
+
 ## Architecture
 FortuneTeller frame uses [ORA's Onchain AI Oracle](https://docs.ora.io/doc/oao-onchain-ai-oracle/introduction) to generate Onchain Fortune for the users. 
 
@@ -32,18 +35,17 @@ FortuneTeller contracts are deployed on Base to allow fast and affordable blockc
 
 > If you don't want to use ngrok, you can test the frame using local debugger from [frames.js](https://framesjs.org/).
 
-## Deployed contracts
-**Base Deployment**
-
-All the contracts are verified on the [blockscout](https://base.blockscout.com/) explorer.
-- FortuneTeller.sol: [0x734Ce2D6E599f8bA401eC77d1fd41C9f57ECf491](https://base.blockscout.com/address/0x734Ce2D6E599f8bA401eC77d1fd41C9f57ECf491)
-- AIGCNFT.sol: [0xa2Ab28f5CBAE53E316868B167872F1bC8Ab28c63](https://base.blockscout.com/address/0xa2Ab28f5CBAE53E316868B167872F1bC8Ab28c63)
 
 ## Video Demo
 
 [FortuneTeller Demo](https://youtu.be/AFPiAhvKx-0)
 
 ## Future Work
+We encourage community to build on top of this repository and explore new use cases.
+
+Some of the steps that could be done in the future:
+
+- Add proxy pattern to enable upgradability of application in the future
 - Integrate ORA's rng oracle, to enable more random fortune telling
 - create a dashboard for minted NFTs
 

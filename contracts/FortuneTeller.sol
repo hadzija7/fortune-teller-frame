@@ -2,11 +2,18 @@
 pragma solidity ^0.8.13;
 
 import "OAO/contracts/interfaces/IAIOracle.sol";
-import "./AIOracleCallbackReceiverPayable.sol";
+import "OAO/contracts/AIOracleCallbackReceiver.sol";
+import "./AIGCNFT.sol";
 
-/// @notice Contract that requests nested inference from OAO. 
+/**
+*       DISCLAIMER: THIS SMART CONTRACT IS FOR DEMONSTRATION PURPOSES ONLY!
+*                   IT IS NOT AUDITED!
+*                   DO NOT USE IT IN PRODUCTION!
+*/
+
+/// @notice Contract that requests nested inference from AI Oracle. 
 /// @dev First inference is initiated through calculateAIResult method, the second one is requested from the callback.
-contract FortuneTeller is AIOracleCallbackReceiverPayable {
+contract FortuneTeller is AIOracleCallbackReceiver, AIGCNFT {
 
     event promptsUpdated(
         uint256 requestId,
@@ -32,6 +39,8 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
     }
 
     address public owner;
+    uint256 public llamaId;
+    uint256 public sdId;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner");
@@ -45,11 +54,12 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
     mapping(uint256 => uint64) public callbackGasLimit;
 
     /// @notice Initialize the contract, binding it to a specified AIOracle.
-    constructor(IAIOracle _aiOracle) AIOracleCallbackReceiverPayable(_aiOracle) {
+    constructor(IAIOracle _aiOracle) AIOracleCallbackReceiver(_aiOracle) {
         owner = msg.sender;
-        callbackGasLimit[50] = 500_000; // Stable-Diffusion
-        callbackGasLimit[11] = 5_000_000; // Llama3
-        callbackGasLimit[503] = 500_000; // SD3
+        llamaId = 11;
+        sdId = 503;
+        callbackGasLimit[llamaId] = 5_000_000;
+        callbackGasLimit[sdId] = 500_000;
     }
 
     /// @notice sets the callback gas limit for a model
@@ -73,27 +83,34 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
     /// @param requestId id of the request  
     /// @param output result of the OAO computation
     /// @param callbackData Callback data is the modelId and the prompt for AI request.
-    function aiOracleCallback(uint256 requestId, bytes calldata output, bytes calldata callbackData) external payable override onlyAIOracleCallback() {
+    function aiOracleCallback(uint256 requestId, bytes calldata output, bytes calldata callbackData) external override onlyAIOracleCallback() {
         AIOracleRequest storage request = requests[requestId];
         require(request.sender != address(0), "request does not exist");
         request.output = output;
         prompts[request.modelId][string(request.input)] = string(output);
 
-        //if callbackData is not empty decode it and call another inference
-        if(callbackData.length != 0){
-            (uint256 model2Id) = abi.decode(callbackData, (uint256));
-            uint256 model2Fee = estimateFee(model2Id);
+        //if callback length is 0, that means this is llama3 result (first inference request)
+        //assign fortune to the aigcData
+        if(callbackData.length == 0){
+            aigcData[request.input].fortune = output;
 
-            (bool success, bytes memory data) = address(aiOracle).call{value: model2Fee}(abi.encodeWithSignature("requestCallback(uint256,bytes,address,uint64,bytes)", model2Id, output, address(this), callbackGasLimit[model2Id], ""));
+            uint256 sdFee = estimateFee(sdId);
+
+            (bool success, bytes memory data) = address(aiOracle).call{value: sdFee}(abi.encodeWithSignature("requestCallback(uint256,bytes,address,uint64,bytes)", sdId, output, address(this), callbackGasLimit[sdId], abi.encode(request.input)));
             require(success, "failed to call nested inference");
 
             (uint256 rid) = abi.decode(data, (uint256));
             AIOracleRequest storage recursiveRequest = requests[rid];
             recursiveRequest.input = output;
             recursiveRequest.sender = msg.sender;
-            recursiveRequest.modelId = model2Id;
-            emit promptRequest(requestId, rid, msg.sender, model2Id, "");
+            recursiveRequest.modelId = sdId;
+            emit promptRequest(requestId, rid, msg.sender, sdId, "");
+
+        }else{
+            (bytes memory prompt) = abi.decode(callbackData, (bytes));
+            aigcData[prompt].imageCID = output;
         }
+        
 
         emit promptsUpdated(requestId, request.modelId, string(request.input), string(output), callbackData);
     }
@@ -105,18 +122,29 @@ contract FortuneTeller is AIOracleCallbackReceiverPayable {
 
     /// @notice main point of interaction with OAO
     /// @dev modelId and prompt for second inference are passed as the callback data.
-    function calculateAIResult(uint256 model1Id, uint256 model2Id, string calldata model1Prompt) payable external returns (uint256) {
-        bytes memory input = bytes(model1Prompt);
-        uint256 model1Fee = estimateFee(model1Id);
-        uint256 requestId = aiOracle.requestCallback{value: model1Fee}(
-            model1Id, input, address(this), callbackGasLimit[model1Id], abi.encode(model2Id)
+    function calculateAIResult(string calldata prompt) payable external returns (uint256) {
+        bytes memory input = bytes(prompt);
+        uint256 llamaFee = estimateFee(llamaId);
+        uint256 sdFee = estimateFee(sdId);
+        require(msg.value > llamaFee + sdFee, "FortuneTeller: Insufficient fee");
+
+        uint256 requestId = aiOracle.requestCallback{value: llamaFee}(
+            llamaId, input, address(this), callbackGasLimit[llamaId], ""
         );
+
+        mint(prompt);
+
         AIOracleRequest storage request = requests[requestId];
         request.input = input;
         request.sender = msg.sender;
-        request.modelId = model1Id;
-        emit promptRequest(requestId, 0, msg.sender, model1Id, model1Prompt);
+        request.modelId = llamaId;
+        emit promptRequest(requestId, 0, msg.sender, llamaId, prompt);
         return requestId;
+    }
+
+    function withdrawExcessFunds(address payable recipient, uint256 amount) public onlyOwner {
+        (bool succeed,) = recipient.call{value: amount}("");
+        require(succeed, "Withdraw failed");
     }
 
 }

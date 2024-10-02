@@ -51,10 +51,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // const diffusionResult = await contract.methods.prompts(503, llamaResult).call()
     // console.log("Diffusion result: ", diffusionResult)
 
-    // if (!llamaResult || !diffusionResult) {
-      // const ret = getResultPendingFrameHtml(txhash)
-    //   return new NextResponse(ret)
-    // }
+    if (!tokenUri) {
+      const ret = getResultPendingFrameHtml(txhash)
+      return new NextResponse(ret)
+    }
 
     const html = getFrameHtmlResponse({
       image: `${NEXT_PUBLIC_URL}/api/images/fortune?f=${encodeURIComponent("")}&i=${encodeURIComponent(tokenUri)}`,
@@ -64,10 +64,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       '<meta property="og:title" content="FortuneTeller frame">',
       '<meta property="og:description" content="Farcaster Protocol OAO">',
       '<meta property="fc:frame:image:aspect_ratio" content="1:1" />',
-      // '<meta property="fc:frame:button:1" content="Mint NFT" />',
-      // '<meta property="fc:frame:button:1:action" content="tx" />',
-      // `<meta property="fc:frame:button:1:target" content="${NEXT_PUBLIC_URL}/api/mint?requestId=${encodeURIComponent(requestId)}&fortune=${encodeURIComponent(llamaResult)}&image=${encodeURIComponent(diffusionResult)}"/>`,
-      // `<meta property="fc:frame:button:1:post_url" content="${NEXT_PUBLIC_URL}/api/last_frame" />`,
+      '<meta property="fc:frame:button:1" content="Play Again" />',
+      `<meta property="fc:frame:button:1:target" content="${NEXT_PUBLIC_URL}/api/start"/>`
     ];
     
     const ret = `${html.slice(0, html.length - 14)}${extraTags.join('')}</head></html>`;
