@@ -2,7 +2,7 @@
 FortuneTeller is a Farcaster frame application that calculates onchain fortune for the users. Users answer specific questions to the wizard. Then the wizard casts its spells and tells the fortune.
 
 ## DISCLAIMER
-> [!NOTE]  The purpose of FortuneTeller is to demonstrate how ORA's AI Oracle works. The codebase is NOT audited. Use it at your own risk.
+> The purpose of FortuneTeller is to demonstrate how ORA's AI Oracle works. The codebase is NOT audited. Use it at your own risk.
 
 ## Architecture
 FortuneTeller frame uses [ORA's Onchain AI Oracle](https://docs.ora.io/doc/oao-onchain-ai-oracle/introduction) to generate Onchain Fortune for the users. 
