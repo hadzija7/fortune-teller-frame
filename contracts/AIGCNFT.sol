@@ -53,9 +53,7 @@ contract AIGCNFT is IERC7007, ERC721 { //IERC165, ERC721 {
     function tokenURI(uint256 tokenId) override public view returns (string memory) {
         bytes memory prompt = tokenIdToPrompt[tokenId];
         string memory json = Base64.encode(bytes(string(abi.encodePacked(
-            '{"image": "ipfs://', string(aigcData[prompt].imageCID),'"}'))));
-        // string memory json = Base64.encode(bytes(string(abi.encodePacked(
-        //     '{"name":"token#', toString(tokenId), '", "attributes": [{"trait_type": "fortune", "value": "', string(aigcData[prompt].fortune), '"}, {"trait_type": "author", "value": "0x', toAsciiString(aigcData[prompt].author), '"}, {"trait_type": "model", "value": "Stable Diffusion"}], "description": "FortuneTeller utilises ORAs AI Oracle to mint AIGC NFTs about each players fortune.", "image": "ipfs://', string(aigcData[prompt].imageCID), '"}'))));
+            '{"name":"token#', toString(tokenId), '", "attributes": [{"trait_type": "author", "value": "0x', toAsciiString(aigcData[prompt].author), '"}, {"trait_type": "model", "value": "Stable Diffusion v3"}], "description": "FortuneTeller utilises ORAs AI Oracle to mint AIGC NFTs about each players fortune.", "image": "ipfs://', string(aigcData[prompt].imageCID), '"}'))));
         string memory output = string(abi.encodePacked('data:application/json;base64,', json));
 
         return output;

@@ -36,7 +36,9 @@ export function FortuneCard({ message, image }: { message: string; image?: strin
             overflow: 'visible'
           }}
         >
-          <p style={{ margin: '0 auto', textAlign: 'center', width: '60%' }}>{message}</p>
+          <p style={{ margin: '0 auto', textAlign: 'center', width: '60%' }}>
+            {message}
+          </p>
         </div>
       )}
     </div>

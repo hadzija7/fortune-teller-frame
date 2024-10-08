@@ -9,13 +9,14 @@ export async function GET(req: NextRequest) {
 
   const decodedString = decodeURIComponent(fortune);
   const imageCID = decodeURIComponent(image);
+  const messageString = "AIGC NFT SUCCESSFULLY MINTED!"
 
   console.log("Decoded string: ", decodedString)
   console.log("Decoded image: ", imageCID)
 
-  // const imageUrl = `https://ipfs.io/ipfs/${imageCID}`
+  const imageUrl = `https://ipfs.io/ipfs/${imageCID}`
 
-  return new ImageResponse(<FortuneCard message={`${decodedString}`} image={imageCID}/>, {
+  return new ImageResponse(<FortuneCard message={`${messageString}`} image={imageUrl}/>, {
     width: 1200,
     height: 1200
   });

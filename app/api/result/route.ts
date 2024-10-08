@@ -37,27 +37,30 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // const decodedData = web3.eth.abi.decodeParameters(event_abi, data.toString());
     // const tokenId = decodedData.tokenId;
     const contract: any = new web3.eth.Contract(FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS);
-    const tokenUri = await contract.methods.tokenURI(tokenId).call();
+    const tokenUri: string = await contract.methods.tokenURI(tokenId).call();
     console.log("TokenURI: ", tokenUri)
 
-    // const llamaPrompt = decodedData.prompt
-    // const requestId = Number(decodedData.requestId)
+    const rawBase64 = tokenUri.substring(29)
+    console.log("Raw Base64: ", rawBase64)
 
-    // //reading result from the contract
-    // const contract: any = new web3.eth.Contract(FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS);
-    // const llamaResult = await contract.methods.prompts(11, llamaPrompt).call()
-    // console.log("Llama result: ", llamaResult);
+    const decodedTokenURI: any = atob(rawBase64);
+    console.log("Decoded Token URI: ", decodedTokenURI)
 
-    // const diffusionResult = await contract.methods.prompts(503, llamaResult).call()
-    // console.log("Diffusion result: ", diffusionResult)
+    const json = JSON.parse(decodedTokenURI)
+    console.log("JSON: ", json)
 
-    if (!tokenUri) {
+    const image: string = json.image
+
+    if(tokenUri == "" || image == "ipfs://"){
       const ret = getResultPendingFrameHtml(txhash)
       return new NextResponse(ret)
     }
 
+    const cid = image.substring(7)
+    console.log("CID: ", cid)
+
     const html = getFrameHtmlResponse({
-      image: `${NEXT_PUBLIC_URL}/api/images/fortune?f=${encodeURIComponent("")}&i=${encodeURIComponent(tokenUri)}`,
+      image: `${NEXT_PUBLIC_URL}/api/images/fortune?f=${encodeURIComponent("")}&i=${encodeURIComponent(cid)}`,
     });
   
     const extraTags = [
