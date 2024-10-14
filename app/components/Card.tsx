@@ -31,12 +31,13 @@ export function FortuneCard({ message, image }: { message: string; image?: strin
             height: '100%',
             objectFit: 'cover',
             color: '#00F6FF',
-            fontSize: '35px',
+            fontSize: '50px',
             marginTop: '30px',
-            overflow: 'visible'
+            overflow: 'visible',
+            textAlign: 'center',
           }}
         >
-          <p style={{ margin: '0 auto', textAlign: 'center', width: '60%' }}>
+          <p style={{ margin: '0 auto', textAlign: 'center' }}>
             {message}
           </p>
         </div>

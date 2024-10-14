@@ -92,7 +92,7 @@ contract FortuneTeller is AIOracleCallbackReceiver, AIGCNFT {
         //if callback length is 0, that means this is llama3 result (first inference request)
         //assign fortune to the aigcData
         if(callbackData.length == 0){
-            aigcData[request.input].fortune = output;
+            aigc[request.input].fortune = output;
 
             uint256 sdFee = estimateFee(sdId);
 
@@ -100,6 +100,8 @@ contract FortuneTeller is AIOracleCallbackReceiver, AIGCNFT {
             require(success, "failed to call nested inference");
 
             (uint256 rid) = abi.decode(data, (uint256));
+            aigc[request.input].nestedRequestId = rid;
+
             AIOracleRequest storage recursiveRequest = requests[rid];
             recursiveRequest.input = output;
             recursiveRequest.sender = msg.sender;
@@ -108,7 +110,7 @@ contract FortuneTeller is AIOracleCallbackReceiver, AIGCNFT {
 
         }else{
             (bytes memory prompt) = abi.decode(callbackData, (bytes));
-            aigcData[prompt].imageCID = output;
+            aigc[prompt].imageCID = output;
         }
         
 
@@ -132,7 +134,7 @@ contract FortuneTeller is AIOracleCallbackReceiver, AIGCNFT {
             llamaId, input, address(this), callbackGasLimit[llamaId], ""
         );
 
-        mint(prompt);
+        mint(prompt, requestId);
 
         AIOracleRequest storage request = requests[requestId];
         request.input = input;
@@ -143,8 +145,20 @@ contract FortuneTeller is AIOracleCallbackReceiver, AIGCNFT {
     }
 
     function withdrawExcessFunds(address payable recipient, uint256 amount) public onlyOwner {
+        require(amount <= address(this).balance, "not enough funds");
         (bool succeed,) = recipient.call{value: amount}("");
         require(succeed, "Withdraw failed");
+    }
+
+    /**
+     * @dev Verify the `prompt`, `aigcData` and `proof`.
+     */
+    function verify(
+        bytes calldata prompt,
+        bytes calldata aigcData,
+        bytes calldata proof
+    ) external view override returns (bool success) {
+        return aiOracle.isFinalized(aigc[prompt].requestId) && aiOracle.isFinalized(aigc[prompt].nestedRequestId);
     }
 
 }

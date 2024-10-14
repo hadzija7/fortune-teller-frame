@@ -14,28 +14,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
     const receipt = await web3.eth.getTransactionReceipt(txhash);
 
-    console.log("Receipt logs: ", receipt.logs)
-
-    const data = receipt.logs[1].data ? receipt.logs[1].data : '0x'
-    const event_abi = [
-      {
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ];
-
     const tokenId = Number(receipt.logs[1].topics?.[3])
 
-    // const decodedData = web3.eth.abi.decodeParameters(event_abi, data.toString());
-    // const tokenId = decodedData.tokenId;
     const contract: any = new web3.eth.Contract(FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS);
     const tokenUri: string = await contract.methods.tokenURI(tokenId).call();
     console.log("TokenURI: ", tokenUri)
