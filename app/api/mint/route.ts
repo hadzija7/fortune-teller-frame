@@ -1,7 +1,7 @@
 import { getFrameMessage } from '@coinbase/onchainkit/frame';
 import { FrameRequest } from '@coinbase/onchainkit/frame';
 import { NextRequest, NextResponse } from 'next/server';
-import { AIGCNFT_ABI, AIGCNFT_ADDRESS, CHAIN_ID, FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS, RPC_URL } from '../../config';
+import { CHAIN_ID, FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS, RPC_URL } from '../../config';
 import {Web3} from 'web3';
 import { allowedOrigin } from '../../lib/origin';
 
@@ -32,14 +32,14 @@ export async function POST(req: NextRequest) {
 
   const contract = new web3.eth.Contract(FORTUNE_TELLER_ABI, FORTUNE_TELLER_ADDRESS);
 
-  return NextResponse.json({
-    chainId: `eip155:${CHAIN_ID}`,
-    method: 'eth_sendTransaction',
-    params: {
-      abi: AIGCNFT_ABI,
-      to: AIGCNFT_ADDRESS,
-      data
-    },
-  });
+  // return NextResponse.json({
+  //   chainId: `eip155:${CHAIN_ID}`,
+  //   method: 'eth_sendTransaction',
+  //   params: {
+  //     abi: AIGCNFT_ABI,
+  //     to: AIGCNFT_ADDRESS,
+  //     data
+  //   },
+  // });
 
 }

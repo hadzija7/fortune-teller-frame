@@ -9,15 +9,18 @@ export const FORTUNE_TELLER_ABI = [{"inputs":[{"internalType":"contract IAIOracl
 export const FORTUNE_TELLER_ADDRESS_SEPOLIA = process.env.FORTUNE_TELLER_ADDRESS_SEPOLIA
 export const FORTUNE_TELLER_ADDRESS_OP_SEPOLIA = process.env.FORTUNE_TELLER_ADDRESS_OP_SEPOLIA
 export const FORTUNE_TELLER_ADDRESS_ARB_SEPOLIA = process.env.FORTUNE_TELLER_ADDRESS_ARB_SEPOLIA
-export const FORTUNE_TELLER_ADDRESS = FORTUNE_TELLER_ADDRESS_ARB_SEPOLIA
+export const FORTUNE_TELLER_ADDRESS_BASE = process.env.FORTUNE_TELLER_ADDRESS_BASE
+export const FORTUNE_TELLER_ADDRESS = FORTUNE_TELLER_ADDRESS_BASE
 
 export const OP_SEPOLIA_CHAIN_ID = '11155420';
 export const SEPOLIA_CHAIN_ID = '11155111';
 export const ARB_SEPOLIA_CHAIN_ID = '421614';
-export const CHAIN_ID = ARB_SEPOLIA_CHAIN_ID;
+export const BASE_CHAIN_ID = '8453';
+export const CHAIN_ID = BASE_CHAIN_ID;
 
 export const EXPLORERS = {
   '11155420' : 'https://sepolia-optimism.etherscan.io/',
   '11155111' : 'https://sepolia.etherscan.io/',
-  '421614' : 'https://sepolia.arbiscan.io/'
+  '421614' : 'https://sepolia.arbiscan.io/',
+  '8453' : 'https://basescan.org/'
 }
